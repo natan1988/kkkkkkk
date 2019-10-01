@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpressmax
+  labels:
+    app: wordpressmax       
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wp
+        image: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: db-wp
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: wpuser
+              key: password
+        ports:
+        - containerPort: 80
+          name: wordpress

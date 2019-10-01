@@ -1,0 +1,5 @@
+resources:
+- pvmysql.yaml
+- db-wp.yaml
+- mysql.yaml
+- wordpressdepl.yaml

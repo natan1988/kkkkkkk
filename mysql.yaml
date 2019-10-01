@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mysqlrs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backendapp
+  template:
+    metadata:
+      labels:
+        app: backendapp
+    spec:   
+      containers:
+      - name: mysql
+        image: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysqlpass
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysqlport
+        volumeMounts:
+        - name: mysqlpv
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysqlpv
+        persistentVolumeClaim:
+          claimName: mysqlpvc
